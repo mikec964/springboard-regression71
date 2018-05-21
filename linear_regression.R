@@ -7,6 +7,8 @@
 ##     • Perform model comparisons
 ##     • Run and interpret variety of regression models in R
 
+library(ggplot2)
+library(gridExtra)
 ## Set working directory
 ## ─────────────────────────
 
@@ -44,8 +46,14 @@ tail(states.info, 8)
 # summary of expense and csat columns, all rows
 sts.ex.sat <- subset(states.data, select = c("expense", "csat"))
 summary(sts.ex.sat)
+
+expense.plot <- ggplot(states.data, aes("col", expense)) + geom_boxplot()
+csat.plot <- ggplot(states.data, aes("col",csat)) + geom_boxplot()
+grid.arrange(expense.plot, csat.plot, ncol=2)
+
 # correlation between expense and csat
 cor(sts.ex.sat)
+#mac: note negative correlation!
 
 ## Plot the data before fitting models
 ## ───────────────────────────────────────
@@ -68,6 +76,7 @@ sat.mod <- lm(csat ~ expense, # regression formula
               data=states.data) # data set
 # Summarize and print the results
 summary(sat.mod) # show regression coefficients table
+#mac: expense is highly (negatively) correlated
 
 ## Why is the association between expense and SAT scores /negative/?
 ## ─────────────────────────────────────────────────────────────────────
@@ -80,6 +89,7 @@ summary(sat.mod) # show regression coefficients table
 ##   SAT?
 
 summary(lm(csat ~ expense + percent, data = states.data))
+#mac: percent has a higher correlation
 
 ## The lm class and methods
 ## ────────────────────────────
@@ -94,7 +104,8 @@ methods(class = class(sat.mod))[1:9]
 ##   • Use function methods to get more information about the fit
 
 confint(sat.mod)
-# hist(residuals(sat.mod))
+hist(residuals(sat.mod))
+#mac: histogram is normal distribution, yay!
 
 ## Linear Regression Assumptions
 ## ─────────────────────────────────
