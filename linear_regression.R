@@ -9,6 +9,7 @@
 
 library(ggplot2)
 library(gridExtra)
+library(tidyverse)
 ## Set working directory
 ## ─────────────────────────
 
@@ -144,9 +145,26 @@ coef(summary(sat.voting.mod))
 ##   2. Print and interpret the model `summary'
 ##   3. `plot' the model to look for deviations from modeling assumptions
 
+states.data %>%
+  drop_na(energy) %>%
+  ggplot(aes(energy)) + 
+         geom_histogram()
+energy.linmod <- lm(energy ~ metro, data=na.omit(states.data))
+summary(energy.linmod)
+par(mar = c(4, 4, 2, 2), mfrow = c(1, 2)) #optional
+plot(energy.linmod, which = c(1, 2)) # "which" argument optional
+#mac: model not good on outliers
+
 ##   Select one or more additional predictors to add to your model and
 ##   repeat steps 1-3. Is this model significantly better than the model
 ##   with /metro/ as the only predictor?
+
+energy2.linmod <- lm(energy ~ metro + pop + density, data=na.omit(states.data))
+summary(energy2.linmod)
+par(mar = c(4, 4, 2, 2), mfrow = c(1, 2)) #optional
+plot(energy2.linmod, which = c(1, 2)) # "which" argument optional
+anova(energy.linmod, energy2.linmod)
+
 
 ## Interactions and factors
 ## ══════════════════════════
