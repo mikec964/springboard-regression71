@@ -159,12 +159,21 @@ plot(energy.linmod, which = c(1, 2)) # "which" argument optional
 ##   repeat steps 1-3. Is this model significantly better than the model
 ##   with /metro/ as the only predictor?
 
-energy2.linmod <- lm(energy ~ metro + pop + density, data=na.omit(states.data))
+energy2.linmod <- lm(energy ~ density + metro, data=na.omit(states.data))
 summary(energy2.linmod)
+cor(na.omit(states.data$metro), na.omit(states.data$density))
 par(mar = c(4, 4, 2, 2), mfrow = c(1, 2)) #optional
 plot(energy2.linmod, which = c(1, 2)) # "which" argument optional
 anova(energy.linmod, energy2.linmod)
 
+energy3.linmod <- lm(energy ~ region, data=na.omit(states.data))
+summary(energy3.linmod)
+energy4.linmod <- lm(energy ~ region + density, data=na.omit(states.data))
+summary(energy4.linmod)
+
+states.data$northEast <- states.data$region == 'N. East'
+energy5.linmod <- lm(energy ~ northEast + metro + miles, data=na.omit(states.data))
+summary(energy5.linmod)
 
 ## Interactions and factors
 ## ══════════════════════════
