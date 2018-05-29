@@ -165,6 +165,7 @@ cor(na.omit(states.data$metro), na.omit(states.data$density))
 par(mar = c(4, 4, 2, 2), mfrow = c(1, 2)) #optional
 plot(energy2.linmod, which = c(1, 2)) # "which" argument optional
 anova(energy.linmod, energy2.linmod)
+#mac: metro and density are highly correlated, density doesn't help
 
 energy3.linmod <- lm(energy ~ region, data=na.omit(states.data))
 summary(energy3.linmod)
@@ -174,6 +175,14 @@ summary(energy4.linmod)
 states.data$northEast <- states.data$region == 'N. East'
 energy5.linmod <- lm(energy ~ northEast + metro + miles, data=na.omit(states.data))
 summary(energy5.linmod)
+#mac: region doesn't help, but miles does
+cor(na.omit(states.data$energy), na.omit(states.data$miles))
+#mac: .23 correlation is strong but okay to use
+
+energy6.linmod <- lm(energy ~ metro + miles, data=na.omit(states.data))
+summary(energy6.linmod)
+anova(energy.linmod, energy6.linmod)
+#mac: This model is about 1% better than metro only model
 
 ## Interactions and factors
 ## ══════════════════════════
@@ -186,11 +195,11 @@ summary(energy5.linmod)
 ##   For example: Does the association between expense and SAT scores
 ##   depend on the median income in the state?
 
-  #Add the interaction to the model
+#Add the interaction to the model
 sat.expense.by.percent <- lm(csat ~ expense*income,
                              data=states.data) 
 #Show the results
-  coef(summary(sat.expense.by.percent)) # show regression coefficients table
+coef(summary(sat.expense.by.percent)) # show regression coefficients table
 
 ## Regression with categorical predictors
 ## ──────────────────────────────────────────
