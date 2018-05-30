@@ -248,5 +248,12 @@ coef(summary(lm(csat ~ C(region, contr.helmert),
 ##   1. Add on to the regression equation that you created in exercise 1 by
 ##      generating an interaction term and testing the interaction.
 
+states2_lm <- lm(csat ~ percent*region, data = states.data) 
+summary(states2_lm)
+#mac: Region is a significant difference. 
+
 ##   2. Try adding region to the model. Are there significant differences
 ##      across the four regions?
+
+states3_lm <- lm(csat ~ percent + region, data = states.data)
+summary(states3_lm)
